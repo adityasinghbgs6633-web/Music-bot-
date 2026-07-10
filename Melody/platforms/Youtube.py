@@ -284,9 +284,9 @@ class YouTubeAPI:
             return None, False
 
 
-<<<<<<< HEAD
+#<<<<<<< HEAD
 YouTube = YouTubeAPI()
-=======
+#=======
     async def search_channels(self, query: str, limit: int = 1, language: str = 'en', region: str = 'US'):
         """Search for YouTube channels."""
         search = ChannelsSearch(query, limit=limit, language=language, region=region)
