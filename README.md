@@ -1,9 +1,9 @@
 <p align="center">
-  <img src="Melody/assets/equalizer.svg" alt="Melody Icon" width="650">
+  <img src="Aditya/assets/equalizer.svg" alt="Aditya Icon" width="650">
 </p>
 
 <div align="center">
-  <img src="https://readme-typing-svg.herokuapp.com?font=Outfit&weight=800&size=42&duration=3000&pause=1000&color=00D9FF&center=true&vCenter=true&width=500&lines=𝐌𝐄𝐋𝐎𝐃𝐘+𝐌𝐔𝐒𝐈𝐂;𝐔𝐥𝐭𝐫𝐚-𝐋𝐨𝐰+𝐋𝐚𝐭𝐞𝐧𝐜𝐲+𝐒𝐭𝐫𝐞𝐚𝐦𝐢𝐧𝐠;𝐍𝐞𝐱𝐭-𝐆𝐞𝐧+𝐀𝐮𝐝𝐢𝐨+𝐄𝐧𝐠𝐢𝐧𝐞" alt="Melody Typography">
+  <img src="https://readme-typing-svg.herokuapp.com?font=Outfit&weight=800&size=42&duration=3000&pause=1000&color=00D9FF&center=true&vCenter=true&width=500&lines=𝐀𝐃𝐈𝐓𝐘𝐀+𝐌𝐔𝐒𝐈𝐂;𝐔𝐥𝐭𝐫𝐚-𝐋𝐨𝐰+𝐋𝐚𝐭𝐞𝐧𝐜𝐲+𝐒𝐭𝐫𝐞𝐚𝐦𝐢𝐧𝐠;𝐍𝐞𝐱𝐭-𝐆𝐞𝐧+𝐀𝐮𝐝𝐢𝐨+𝐄𝐧𝐠𝐢𝐧𝐞" alt="Aditya Typography">
 
 <br>
 
