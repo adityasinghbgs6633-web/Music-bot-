@@ -11,16 +11,6 @@ from config import SHRUTI_API_URL as API_URL, SHRUTI_API_KEY as API_KEY
 
 DOWNLOAD_DIR = "downloads"
 
-#<<<<<<< HEAD
-#=======
-from py_yt import VideosSearch, Playlist, Search, ChannelsSearch, PlaylistsSearch, Video, Transcript, Suggestions, Recommendations
-async def download_song(link: str) -> Union[str, None]:
-    """
-    Downloads audio from a YouTube link using the external high-speed API.
-    Returns: Absolute path to the downloaded .mp3 file or None if failed.
-    """
-    video_id = link.split('v=')[-1].split('&')[0] if 'v=' in link else link
-#>>>>>>> ce1f9601c2ef5c6e5489ed217e57842e265e94c4
 
 def time_to_seconds(time):
     stringt = str(time)
@@ -284,44 +274,5 @@ class YouTubeAPI:
             return None, False
 
 
-#<<<<<<< HEAD
 YouTube = YouTubeAPI()
-#=======
-    async def search_channels(self, query: str, limit: int = 1, language: str = 'en', region: str = 'US'):
-        """Search for YouTube channels."""
-        search = ChannelsSearch(query, limit=limit, language=language, region=region)
-        return await search.next()
-
-    async def search_playlists(self, query: str, limit: int = 1, language: str = 'en', region: str = 'US'):
-        """Search for YouTube playlists."""
-        search = PlaylistsSearch(query, limit=limit, language=language, region=region)
-        return await search.next()
-
-    async def video_info(self, link: str):
-        """Get full video details (Fallback to VideosSearch due to endpoint issues)."""
-        video_id = link.split('v=')[-1].split('&')[0] if 'v=' in link else link
-        search = VideosSearch(video_id, limit=1)
-        res = await search.next()
-        return res["result"][0] if res and res.get("result") else {}
-
-    async def get_comments(self, link: str):
-        """Fetch comments for a video. (Not supported by current py-yt-search)"""
-        return []
-
-    async def get_transcript(self, link: str):
-        """Retrieve the transcript/captions for a video."""
-        return await Transcript.get(link)
-
-    async def get_suggestions(self, query: str, language: str = 'en', region: str = 'US'):
-        """Get YouTube search suggestions/autocomplete."""
-        return await Suggestions.get(query, language=language, region=region)
-
-    async def get_related(self, videoid: str):
-        """Fetch related videos for a given video ID."""
-        try:
-            r = Recommendations()
-            return await r.getRelated(videoid)
-        except Exception as e:
-            LOGGER("YouTube").error(f"Failed to get related videos: {e}")
-            return {"result": []}
->>>>>>> ce1f9601c2ef5c6e5489ed217e57842e265e94c4
+        
