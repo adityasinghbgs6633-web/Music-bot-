@@ -11,8 +11,8 @@ from config import SHRUTI_API_URL as API_URL, SHRUTI_API_KEY as API_KEY
 
 DOWNLOAD_DIR = "downloads"
 
-<<<<<<< HEAD
-=======
+#<<<<<<< HEAD
+#=======
 from py_yt import VideosSearch, Playlist, Search, ChannelsSearch, PlaylistsSearch, Video, Transcript, Suggestions, Recommendations
 async def download_song(link: str) -> Union[str, None]:
     """
