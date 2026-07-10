@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="Aditya/assets/equalizer.svg" alt="Aditya Icon" width="650">
+  <img src="Melody/assets/equalizer.svg" alt="Aditya Icon" width="650">
 </p>
 
 <div align="center">
