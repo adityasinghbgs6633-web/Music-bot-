@@ -119,41 +119,79 @@ class YouTubeAPI:
             link = self.base + link
         if "&" in link:
             link = link.split("&")[0]
-        results = VideosSearch(link, limit=1)
-        for result in (await results.next())["result"]:
-            title = result["title"]
-            duration_min = result["duration"]
-            thumbnail = result["thumbnails"][0]["url"].split("?")[0]
-            vidid = result["id"]
-            duration_sec = int(time_to_seconds(duration_min)) if duration_min else 0
-        return title, duration_min, duration_sec, thumbnail, vidid
+        try:
+            results = VideosSearch(link, limit=1)
+            search_results = await asyncio.wait_for(results.next(), timeout=10)
+            result_list = search_results.get("result", [])
+            
+            if not result_list:
+                raise Exception("No results found")
+                
+            for result in result_list:
+                title = result["title"]
+                duration_min = result["duration"]
+                thumbnail = result["thumbnails"][0]["url"].split("?")[0]
+                vidid = result["id"]
+                duration_sec = int(time_to_seconds(duration_min)) if duration_min else 0
+            return title, duration_min, duration_sec, thumbnail, vidid
+        except asyncio.TimeoutError:
+            raise Exception("YouTube search timeout")
+        except Exception as e:
+            raise Exception(f"Failed to fetch track details: {str(e)}")
 
     async def title(self, link: str, videoid: Union[bool, str] = None):
         if videoid:
             link = self.base + link
         if "&" in link:
             link = link.split("&")[0]
-        results = VideosSearch(link, limit=1)
-        for result in (await results.next())["result"]:
-            return result["title"]
+        try:
+            results = VideosSearch(link, limit=1)
+            search_results = await asyncio.wait_for(results.next(), timeout=10)
+            result_list = search_results.get("result", [])
+            
+            if not result_list:
+                return None
+                
+            for result in result_list:
+                return result["title"]
+        except:
+            return None
 
     async def duration(self, link: str, videoid: Union[bool, str] = None):
         if videoid:
             link = self.base + link
         if "&" in link:
             link = link.split("&")[0]
-        results = VideosSearch(link, limit=1)
-        for result in (await results.next())["result"]:
-            return result["duration"]
+        try:
+            results = VideosSearch(link, limit=1)
+            search_results = await asyncio.wait_for(results.next(), timeout=10)
+            result_list = search_results.get("result", [])
+            
+            if not result_list:
+                return None
+                
+            for result in result_list:
+                return result["duration"]
+        except:
+            return None
 
     async def thumbnail(self, link: str, videoid: Union[bool, str] = None):
         if videoid:
             link = self.base + link
         if "&" in link:
             link = link.split("&")[0]
-        results = VideosSearch(link, limit=1)
-        for result in (await results.next())["result"]:
-            return result["thumbnails"][0]["url"].split("?")[0]
+        try:
+            results = VideosSearch(link, limit=1)
+            search_results = await asyncio.wait_for(results.next(), timeout=10)
+            result_list = search_results.get("result", [])
+            
+            if not result_list:
+                return None
+                
+            for result in result_list:
+                return result["thumbnails"][0]["url"].split("?")[0]
+        except:
+            return None
 
     async def video(self, link: str, videoid: Union[bool, str] = None):
         if videoid:
@@ -193,21 +231,34 @@ class YouTubeAPI:
             link = self.base + link
         if "&" in link:
             link = link.split("&")[0]
-        results = VideosSearch(link, limit=1)
-        for result in (await results.next())["result"]:
-            title = result["title"]
-            duration_min = result["duration"]
-            vidid = result["id"]
-            yturl = result["link"]
-            thumbnail = result["thumbnails"][0]["url"].split("?")[0]
-        track_details = {
-            "title": title,
-            "link": yturl,
-            "vidid": vidid,
-            "duration_min": duration_min,
-            "thumb": thumbnail,
-        }
-        return track_details, vidid
+        
+        try:
+            results = VideosSearch(link, limit=1)
+            search_results = await asyncio.wait_for(results.next(), timeout=10)
+            result_list = search_results.get("result", [])
+            
+            if not result_list:
+                raise Exception("No search results found for track")
+            
+            for result in result_list:
+                title = result.get("title", "Unknown")
+                duration_min = result.get("duration", "0:00")
+                vidid = result.get("id")
+                yturl = result.get("link")
+                thumbnail = result.get("thumbnails", [{}])[0].get("url", "").split("?")[0]
+            
+            track_details = {
+                "title": title,
+                "link": yturl,
+                "vidid": vidid,
+                "duration_min": duration_min,
+                "thumb": thumbnail,
+            }
+            return track_details, vidid
+        except asyncio.TimeoutError:
+            raise Exception("Failed to fetch track details - Request timeout")
+        except Exception as e:
+            raise Exception(f"Failed to fetch track details: {str(e)}")
 
     async def formats(self, link: str, videoid: Union[bool, str] = None):
         if videoid:
@@ -241,13 +292,21 @@ class YouTubeAPI:
             link = self.base + link
         if "&" in link:
             link = link.split("&")[0]
-        a = VideosSearch(link, limit=10)
-        result = (await a.next()).get("result")
-        title = result[query_type]["title"]
-        duration_min = result[query_type]["duration"]
-        vidid = result[query_type]["id"]
-        thumbnail = result[query_type]["thumbnails"][0]["url"].split("?")[0]
-        return title, duration_min, thumbnail, vidid
+        try:
+            a = VideosSearch(link, limit=10)
+            search_results = await asyncio.wait_for(a.next(), timeout=10)
+            result = search_results.get("result", [])
+            
+            if not result or len(result) <= query_type:
+                raise Exception("Invalid slider query")
+            
+            title = result[query_type]["title"]
+            duration_min = result[query_type]["duration"]
+            vidid = result[query_type]["id"]
+            thumbnail = result[query_type]["thumbnails"][0]["url"].split("?")[0]
+            return title, duration_min, thumbnail, vidid
+        except Exception as e:
+            raise Exception(f"Slider error: {str(e)}")
 
     async def download(
         self,
