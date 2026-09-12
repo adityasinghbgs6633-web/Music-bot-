@@ -232,33 +232,49 @@ class YouTubeAPI:
         if "&" in link:
             link = link.split("&")[0]
         
-        try:
-            results = VideosSearch(link, limit=1)
-            search_results = await asyncio.wait_for(results.next(), timeout=10)
-            result_list = search_results.get("result", [])
-            
-            if not result_list:
-                raise Exception("No search results found for track")
-            
-            for result in result_list:
-                title = result.get("title", "Unknown")
-                duration_min = result.get("duration", "0:00")
-                vidid = result.get("id")
-                yturl = result.get("link")
-                thumbnail = result.get("thumbnails", [{}])[0].get("url", "").split("?")[0]
-            
-            track_details = {
-                "title": title,
-                "link": yturl,
-                "vidid": vidid,
-                "duration_min": duration_min,
-                "thumb": thumbnail,
-            }
-            return track_details, vidid
-        except asyncio.TimeoutError:
-            raise Exception("Failed to fetch track details - Request timeout")
-        except Exception as e:
-            raise Exception(f"Failed to fetch track details: {str(e)}")
+        max_retries = 3
+        last_error = None
+        
+        for attempt in range(max_retries):
+            try:
+                results = VideosSearch(link, limit=1)
+                search_results = await asyncio.wait_for(results.next(), timeout=15)
+                result_list = search_results.get("result", [])
+                
+                if not result_list:
+                    if attempt < max_retries - 1:
+                        await asyncio.sleep(2 ** attempt)
+                        continue
+                    raise Exception("No search results found")
+                
+                for result in result_list:
+                    title = result.get("title", "Unknown")
+                    duration_min = result.get("duration", "0:00")
+                    vidid = result.get("id")
+                    yturl = result.get("link")
+                    thumbnail = result.get("thumbnails", [{}])[0].get("url", "").split("?")[0]
+                
+                track_details = {
+                    "title": title,
+                    "link": yturl,
+                    "vidid": vidid,
+                    "duration_min": duration_min,
+                    "thumb": thumbnail,
+                }
+                return track_details, vidid
+                
+            except asyncio.TimeoutError as e:
+                last_error = str(e)
+                if attempt < max_retries - 1:
+                    await asyncio.sleep(2 ** attempt)
+                    continue
+                raise Exception(f"YouTube API timeout after {max_retries} retries")
+            except Exception as e:
+                last_error = str(e)
+                if attempt < max_retries - 1:
+                    await asyncio.sleep(2 ** attempt)
+                    continue
+                raise Exception(f"Failed to fetch track details: {last_error}")
 
     async def formats(self, link: str, videoid: Union[bool, str] = None):
         if videoid:
